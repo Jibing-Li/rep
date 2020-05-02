@@ -1,0 +1,105 @@
+Git
+初次使用时配置：
+$ git config --global user.name "John Doe"
+$ git config --global user.email johndoe@example.com
+$ git config --global core.editor emacs
+
+查看每次提交的差异：
+git log -p
+
+补充提交，修改提交信息
+git commit --amend
+
+添加远程仓库
+git remote add <shortname> <url>
+$ git remote add pb https://github.com/paulboone/ticgit
+$ git remote -v
+origin https://github.com/schacon/ticgit (fetch)
+origin https://github.com/schacon/ticgit (push)
+pb https://github.com/paulboone/ticgit (fetch)
+pb https://github.com/paulboone/ticgit (push)
+
+从远程仓库获取数据，更新所有远程分支数据，但不合并，也不在本地自动生成可修改的分支，只有一个不可修改的指针，比如origin/branch1， 不会影响当前分支，可以用git merge origin/branch1把内容合并到当前分支：
+git fetch <remote>
+$ git fetch pb
+
+设定本地分支跟踪哪一个远程分支
+git checkout -b <branch> <remote>/<branch>
+$ git checkout -b branch1 origin/branch1
+这会给你一个用于工作的本地分支branch1，跟踪远程分支origin/branch1
+
+
+推送到远程仓库
+git push <remote> <branch>
+$ git push origin master
+
+查看远程仓库：
+git remote show <remote>
+$ git remote show origin
+* remote origin
+ Fetch URL: https://github.com/schacon/ticgit
+ Push URL: https://github.com/schacon/ticgit
+ HEAD branch: master
+ Remote branches:
+ master tracked
+ dev-branch tracked
+ Local branch configured for 'git pull':
+ master merges with remote master
+ Local ref configured for 'git push':
+ master pushes to master (up to date)
+
+远程仓库的重命名与移除：
+git remote rename
+$ git remote rename pb paul
+git remote remove
+$ git remote remove paul
+
+打标签tag：
+annotated:
+$ git tag -a v1.4 -m "my version 1.4"
+lightweight:
+$ git tag v1.4-lw
+git show <tag-name>
+标签推送到远程：
+$ git push origin v1.5
+检出标签：
+$ git checkout v2.0.0
+
+创建分支：
+git branch <new_branch_name>
+删除分支：
+git branch -d <branch_name>
+删除远程分支：
+git push <remote> --delete <branch_name>
+git push origin --delete serverfix
+切换分支：
+git checkout <branch_name>
+创建分支并切换：
+git checkout -b <new_branch_name>
+合并分支：(把branch_name合并到当前分支）
+git merge <branch_name>
+合并冲突：
+git merge <branch_name>
+处理冲突
+git add <file_name>
+git commit
+查看分支历史:
+git log --oneline --decorate --graph --all
+查看每个分支最后一个提交：
+git branch -v
+git branch -vv (
+查看已合并到当前分支的分支：
+git branch --merged
+查看没有合并到当前分支的分支：
+git branch --no-merged
+
+变基rebase：
+此例以master为基底，把experiment的更新依次应用到master上
+$ git checkout experiment
+$ git rebase master
+也可以这样(不用checkout切换branch了，在任何branch上都可以操作)：
+git rebase <upstream> <branch>
+$ git rebase master experiment
+
+取出 client 分支，找出它从 server 分支分歧之后的补丁， 然后把这些补丁在master 分支上重放一遍，让 client 看起来像直接基于 master 修改一样
+$ git rebase --onto master server client
